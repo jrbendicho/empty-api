@@ -19,11 +19,7 @@ pipeline {
                sh 'dotnet build empty-api.sln --configuration Release --no-restore'
             }
          }
-        stage('Test: Unit Test'){
-           steps {
-                sh 'dotnet test XUnitTestProject/XUnitTestProject.csproj --configuration Release --no-restore'
-             }
-          }
+        
         stage('Publish'){
              steps{
                sh 'dotnet publish empty-api/empty-api.csproj --configuration Release --no-restore'
