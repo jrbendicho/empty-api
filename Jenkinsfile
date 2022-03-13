@@ -1,3 +1,14 @@
+stage ('Clean workspace') {
+  steps {
+    cleanWs()
+  }
+}
+stage ('Git Checkout') {
+  steps {
+      git branch: 'master', credentialsId: 'ae16329b-775d-482d-9a11-3494817e5356', url: 'https://github.com/jrbendicho/empty-api.git'
+    }
+  }
+
 stage('Restore packages'){
    steps{
       bat "dotnet restore empty-api\\empty-api.csproj"
