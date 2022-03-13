@@ -1,34 +1,34 @@
-stage ('Clean workspace') {
-  steps {
-    cleanWs()
-  }
-}
-stage ('Git Checkout') {
-  steps {
-      git branch: 'master', credentialsId: 'ae16329b-775d-482d-9a11-3494817e5356', url: 'https://github.com/jrbendicho/empty-api.git'
+pipeline {
+    agent any
+    triggers {
+        githubPush()
     }
-  }
-
-stage('Restore packages'){
-   steps{
-      bat "dotnet restore empty-api\\empty-api.csproj"
-     }
-  }
-
-  stage('Clean'){
-    steps{
-        bat "dotnet clean restore empty-api\\empty-api.csproj"
-     }
-   }
-
-   stage('Build'){
-   steps{
-      bat "dotnet build empty-api\\empty-api.csproj --configuration Release"
+    stages {
+        stage('Restore packages'){
+           steps{
+               sh 'dotnet restore empty-api.sln'
+            }
+         }
+        stage('Clean'){
+           steps{
+               sh 'dotnet clean empty-api.sln --configuration Release'
+            }
+         }
+        stage('Build'){
+           steps{
+               sh 'dotnet build empty-api.sln --configuration Release --no-restore'
+            }
+         }
+        stage('Test: Unit Test'){
+           steps {
+                sh 'dotnet test XUnitTestProject/XUnitTestProject.csproj --configuration Release --no-restore'
+             }
+          }
+        stage('Publish'){
+             steps{
+               sh 'dotnet publish empty-api/empty-api.csproj --configuration Release --no-restore'
+             }
+        }
+        
     }
- }
-
- stage('Publish'){
-     steps{
-       bat "dotnet publish empty-api\\empty-api.csproj "
-     }
 }
