@@ -15,6 +15,7 @@ namespace empty_api
 {
     public class Startup
     {
+        //some comment here
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
